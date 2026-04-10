@@ -10,18 +10,29 @@ class Moderacao(commands.Cog):
         self.lista_warns = {}
 
     @app_commands.command(name='unban', description='Revoga o banimento de um usuário usando o ID do usuário')
-    @app_commands.describe(user_id='ID do usuário para revogar o banimento')
-    async def unban(self, interaction: discord.Interaction, *, user_id: int):
-        user = await self.bot.fetch_user(user_id)
+    @app_commands.describe(user_id='ID do usuário para revogar o banimento', motivo='Motivo para revogar o banimento (opcional)')
+    async def unban(self, interaction: discord.Interaction, *, user_id: str, motivo: Optional[str] = None):
+        user = await self.bot.fetch_user(int (user_id))
         await interaction.guild.unban(user)
-        await interaction.response.send_message(f'O banimento de {user.mention} foi revogado! Ele pode voltar ao servidor!')
+        await interaction.response.send_message(f'O banimento de {user.mention} foi revogado! Motivo: {motivo}', ephemeral=True)
+
+        try:
+            await user.send(f"Seu banimento do servidor **{interaction.guild.name}** foi revogado! Motivo: {motivo}")
+        except discord.Forbidden:
+            print("Não consegui enviar DM para o usuário.")
+        
 
     @app_commands.command(name='ban', description='Banir um usuário do servidor')
     @app_commands.describe(membro='Usuário a ser banido', motivo='Motivo do banimento')
     async def ban(self, interaction: discord.Interaction, membro: discord.Member, *, motivo: Optional[str] = None):
         await membro.ban(reason=motivo)
-        await interaction.response.send_message(f'{membro.mention} foi banido do servidor! Motivo: {motivo}')
-
+        await interaction.response.send_message(f'{membro.mention} foi banido do servidor! Motivo: {motivo}', ephemeral=True)
+        try:
+            await membro.send(f"Você foi banido do servidor **{interaction.guild.name}**. Motivo: {motivo}")
+        except discord.Forbidden:
+            print("Não consegui enviar DM para o usuário.")
+        
+        
     @app_commands.command(name='kick', description='Expulsar um usuário do servidor')
     @app_commands.describe(membro='Usuário a ser expulso', motivo='Motivo da expulsão')
     async def kick(self, interaction: discord.Interaction, membro: discord.Member, *, motivo: Optional[str] = None):
@@ -81,6 +92,15 @@ class Moderacao(commands.Cog):
         else:
             self.lista_warns.pop(membro.id)
             await interaction.response.send_message(f'O aviso de {membro.mention} foi removido!')
+
+    @app_commands.command(name='dm', description='Enviar uma mensagem direta para um usuário do servidor')
+    @app_commands.describe(membro='Usuário a receber a mensagem', mensagem='Conteúdo da mensagem')
+    async def dm(self, interaction: discord.Interaction, membro: discord.Member, *, mensagem: str):
+        try:
+            await membro.send(mensagem)
+            await interaction.response.send_message(f'Mensagem enviada para {membro.mention}!', ephemeral=True)
+        except discord.Forbidden:
+            await interaction.response.send_message(f'Não foi possível enviar a mensagem para {membro.mention}. Ele pode ter bloqueado as mensagens diretas ou desativado as DMs.')
 
 async def setup(bot):
     await bot.add_cog(Moderacao(bot))

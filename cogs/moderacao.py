@@ -6,8 +6,8 @@ from datetime import timedelta
 class Moderacao(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.lista_warns = {}
 
-    
     # COMANDOS DE MODERAÇÂO
     @app_commands.command(name='unban', description='Revoga o banimento de um usuário usando o ID do usuário')
     @app_commands.describe(user_id='ID do usuário para revogar o banimento')
@@ -16,7 +16,6 @@ class Moderacao(commands.Cog):
         await interaction.guild.unban(user)
         await interaction.response.send_message(f'O banimento de {user.mention} foi revogado! Ele pode voltar ao servidor!')
 
-    
     @app_commands.command(name='ban', description='Banir um usuário do servidor')
     @app_commands.describe(membro='Usuário a ser banido', motivo='Motivo do banimento')
     async def ban(self, interaction: discord.Interaction, membro: discord.Member, *, motivo=None):
@@ -55,9 +54,6 @@ class Moderacao(commands.Cog):
         await membro.timeout(None)
         await interaction.response.send_message(f'{membro.mention} foi desmutado! Ele pode falar novamente no servidor!')
 
-    def __init__(self, bot):
-        self.bot = bot
-        self.lista_warns = {}
     # AVISOS
     @app_commands.command(name='warn', description='Dar um aviso para um usuário do servidor')
     @app_commands.describe(membro='Usuário a ser avisado', motivo='Motivo do aviso')

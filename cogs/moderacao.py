@@ -43,8 +43,8 @@ class Moderacao(commands.Cog):
 
         await interaction.response.send_message(f'{membro.mention} foi silenciado por 10 minutos! Motivo: {motivo}')
     @app_commands.command(name='unmute', description='Remover o silenciamento de um usuário do servidor')
-    @app_commands.describe(membro='Usuário a ser desmutado', motivo='Motivo do desmutamento')
-    async def unmute(self, interaction: discord.Interaction, membro: discord.Member, *, motivo=None):
+    @app_commands.describe(membro='Usuário a ser desmutado')
+    async def unmute(self, interaction: discord.Interaction, membro: discord.Member):
         # o comando unmute vai remover o cargo de mute do membro e também vai tirar o timeout do membro.
         # o comando discord.utils.get é um comando para pegar o cargo de mute do servidor, caso ele exista.
         unmute_role = discord.utils.get(interaction.guild.roles, name='mute')

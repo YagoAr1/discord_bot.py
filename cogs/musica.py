@@ -163,7 +163,7 @@ class Musica(commands.Cog):
         else:
             await interaction.response.send_message('❌ Não estou em nenhum canal de voz.', ephemeral=True)
  
- 
+    
 async def setup(bot):
     await bot.add_cog(Musica(bot))
  

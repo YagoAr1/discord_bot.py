@@ -35,9 +35,33 @@ class Comandos(commands.Cog):
         msg = await interaction.response.send_message(f'{quantidade} de mensagens foram apagadas com sucesso no canal {canal.mention}! {interaction.user.mention}', ephemeral=True)
         await msg.delete(delay=5) #deleta a mensagem de confirmação após 5 segundos
 
+    @app_commands.command(name='avatar', description='Mostrar o avatar do usuário desejado')
+    @app_commands.describe(usuário='Usuário que deseja ver o avatar')
+    async def avatar(self, interaction: discord.Interaction, usuário: discord.Member):
+        await interaction.response.send_message(f'{usuário.avatar.url}')
 
+    @app_commands.command(name='info', description='Mostrar informações do servidor')
+    async def info(self, interaction: discord.Interaction):
+        embed  = discord.Embed(
+            title='Informações do servidor',
+            description=f'Nome: {interaction.guild.name}\nOwner: {interaction.guild.owner}\nCriado em: {interaction.guild.created}',
+            color=discord.Color.blue()
+        )
+        await interaction.response.send_message(embed=embed)
 
-    
+    @app_commands.command(name='comandos', description='Mostrar os comandos do servidor')
+    async def comandos(self, interaction: discord.Interaction): 
+        embed = discord.Embed(
+            title='Comandos Disponíveis',
+            description=f'Aqui estão os comandos disponíveis no servidor: {interaction.guild.name}',
+            color=discord.Color.blue()
+        )
+        embed.add_field(name='Comandos Gerais', value='- /ping\n- /clear\n- /clearc\n- /avatar\n- /info\n- /comandos', inline=False)
+        embed.add_field(name='Comandos de Música', value='- /join\n- /play\n- /pause\n- /resume\n- /skip\n- /stop', inline=False)
+        embed.add_field(name='Comandos de Ia', value='- /ia')
+        embed.add_field(name='Comandos de Moderação', value='- /unban\n- /ban\n- /kick\n- /mute\n- /unmute\n- /warn\n- /warns\n- /unwarn\n- /dm')
+        await interaction.response.send_message(embed=embed)
+        
 
 async def setup(bot):
     await bot.add_cog(Comandos(bot))

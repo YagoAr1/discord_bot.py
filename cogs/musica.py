@@ -135,14 +135,6 @@ class Musica(commands.Cog):
         else:
             await interaction.response.send_message('❌ Não há nenhuma música tocando.', ephemeral=True)
  
-    @app_commands.command(name='fila', description='Mostra a fila de músicas')
-    async def ver_fila(self, interaction: discord.Interaction):
-        if not self.queue:
-            return await interaction.response.send_message('📋 A fila está vazia.', ephemeral=True)
- 
-        lista = '\n'.join(f'`{i+1}.` {titulo}' for i, (_, titulo) in enumerate(self.queue))
-        await interaction.response.send_message(f'📋 **Fila de músicas:**\n{lista}')
- 
     @app_commands.command(name='stop', description='Para a música e limpa a fila')
     async def stop(self, interaction: discord.Interaction):
         vc = interaction.guild.voice_client
@@ -163,7 +155,7 @@ class Musica(commands.Cog):
         else:
             await interaction.response.send_message('❌ Não estou em nenhum canal de voz.', ephemeral=True)
  
-    
+ 
 async def setup(bot):
     await bot.add_cog(Musica(bot))
  

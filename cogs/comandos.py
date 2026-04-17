@@ -58,8 +58,8 @@ class Comandos(commands.Cog):
         )
         embed.add_field(name='Comandos Gerais', value='- /ping\n- /clear\n- /clearc\n- /avatar\n- /info\n- /comandos', inline=False)
         embed.add_field(name='Comandos de Música', value='- /join\n- /play\n- /pause\n- /resume\n- /skip\n- /stop', inline=False)
-        embed.add_field(name='Comandos de Ia', value='- /ia')
-        embed.add_field(name='Comandos de Moderação', value='- /unban\n- /ban\n- /kick\n- /mute\n- /unmute\n- /warn\n- /warns\n- /unwarn\n- /dm')
+        embed.add_field(name='Comandos de Ia', value='- /ia', inline=False)
+        embed.add_field(name='Comandos de Moderação', value='- /unban\n- /ban\n- /kick\n- /mute\n- /unmute\n- /warn\n- /warns\n- /unwarn\n- /dm\n-')
         await interaction.response.send_message(embed=embed)
         
 
